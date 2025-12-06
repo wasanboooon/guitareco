@@ -39,6 +39,7 @@ RUN apt-get update -qq && \
     libvips \
     pkg-config \
     libpq-dev && \
+    libyaml-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
