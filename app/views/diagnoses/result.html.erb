@@ -1,0 +1,180 @@
+<!-- app/views/diagnoses/result.html.erb -->
+
+<h1>ギター診断結果</h1>
+
+<p>あなたにおすすめのギタータイプは…</p>
+
+<h2><%= @guitar_type.name %></h2>
+
+<h3>どんなギター？</h3>
+<p><%= @guitar_type.description %></p>
+
+<h3>おすすめのスタイル</h3>
+<p><%= @guitar_type.recommended_styles %></p>
+
+<h3>予算別おすすめモデル</h3>
+<ul>
+  <li>〜3万円くらい：<%= @guitar_type.low_price_model %></li>
+  <li>3〜6万円くらい：<%= @guitar_type.mid_price_model %></li>
+  <li>6万円以上：<%= @guitar_type.high_price_model %></li>
+</ul>
+
+<% if @guitar_type.similar_type_code.present? %>
+  <% similar = GuitarType.find_by(code: @guitar_type.similar_type_code) %>
+  <% if similar %>
+    <h3>こんなギターも合いそうです</h3>
+    <p><%= similar.name %> も候補になります。</p>
+  <% end %>
+<% end %>
+
+<%= link_to "もう一度診断する", root_path, class: "btn btn-primary" %>
+
+<hr>
+
+<h3>あなたの近くの楽器屋さん</h3>
+
+<div id="map" style="width: 100%; height: 300px;"></div>
+<ul id="shop-list"></ul>
+
+<script>
+  let map;
+  let infoWindow;
+
+  // ★ 自分の API キー（下の script タグと同じ値）
+  const GOOGLE_API_KEY = "<%= ENV['GOOGLE_MAPS_API_KEY'] %>";
+
+  function initMap() {
+    const defaultPos = { lat: 35.681236, lng: 139.767125 }; // 東京駅
+
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: defaultPos,
+      zoom: 13,
+    });
+
+    infoWindow = new google.maps.InfoWindow();
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          console.log("現在地取得成功", pos);
+          map.setCenter(pos);
+
+          new google.maps.Marker({
+            position: pos,
+            map: map,
+            label: "You",
+          });
+
+          // 現在地の周辺で検索
+          searchNearbyShops(pos);
+        },
+        () => {
+          console.log("現在地取得失敗。デフォルト位置で検索");
+          searchNearbyShops(defaultPos);
+        }
+      );
+    } else {
+      console.log("Geolocation 非対応。デフォルト位置で検索");
+      searchNearbyShops(defaultPos);
+    }
+  }
+
+  // ★ Places API (New) の searchText を使う
+  function searchNearbyShops(location) {
+    const url = "https://places.googleapis.com/v1/places:searchText";
+
+    const body = {
+      textQuery: "ギター 楽器店",
+      languageCode: "ja",
+      maxResultCount: 10,
+      locationBias: {
+        circle: {
+          center: {
+            latitude: location.lat,
+            longitude: location.lng,
+          },
+          radius: 3000.0 // 3km
+        }
+      }
+    };
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": GOOGLE_API_KEY,
+        "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location"
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Places API 応答", data);
+        renderPlaces(data);
+      })
+      .catch((err) => {
+        console.error("Places API エラー", err);
+        const list = document.getElementById("shop-list");
+        list.innerHTML = "<li>お店の検索中にエラーが発生しました。</li>";
+      });
+  }
+
+  function renderPlaces(data) {
+    const list = document.getElementById("shop-list");
+    list.innerHTML = "";
+
+    if (!data.places || data.places.length === 0) {
+      list.innerHTML = "<li>近くの楽器店が見つかりませんでした。</li>";
+      return;
+    }
+
+    data.places.forEach((place) => {
+      const loc = place.location;
+      if (!loc) return;
+
+      const position = {
+        lat: loc.latitude,
+        lng: loc.longitude,
+      };
+
+      const marker = new google.maps.Marker({
+        map: map,
+        position: position,
+      });
+
+      const name = place.displayName?.text || "店舗名不明";
+      const address = place.formattedAddress || "住所情報なし";
+
+      google.maps.event.addListener(marker, "click", () => {
+        const content = `
+          <div>
+            <strong>${name}</strong><br>
+            ${address}
+          </div>
+        `;
+        infoWindow.setContent(content);
+        infoWindow.open(map, marker);
+      });
+
+      const li = document.createElement("li");
+      li.textContent = `${name}（${address}）`;
+      list.appendChild(li);
+    });
+  }
+
+  // callback 用
+  window.initMap = initMap;
+</script>
+
+<!-- Maps JavaScript API 読み込み -->
+<script
+  async
+  defer
+  src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>&callback=initMap">
+</script>
+

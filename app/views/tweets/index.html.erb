@@ -1,0 +1,118 @@
+<h1>Guirareco</h1>
+<%= link_to "ギター診断をする", new_diagnosis_path, class: "btn btn-primary" %>
+<h3>Tweet一覧</h3>
+
+<h3>投稿を検索（タグ）</h3>
+<%= form_tag({ controller: "tweets", action: "index" }, method: :get) do %>
+  <h4>ギターの種類</h4>
+  <% @guitar_type_tags.each do |tag| %>
+    <label>
+      <%= check_box :tag_ids, tag.name %>
+      <%= tag.name %>
+    </label><br>
+  <% end %>
+
+  <h4>価格帯</h4>
+  <% @price_tags.each do |tag| %>
+    <label>
+      <%= check_box :tag_ids, tag.name %>
+      <%= tag.name %>
+    </label><br>
+  <% end %>
+
+  <h4>メーカー</h4>
+  <% @maker_tags.each do |tag| %>
+    <label>
+      <%= check_box :tag_ids, tag.name %>
+      <%= tag.name %>
+    </label><br>
+  <% end %>
+
+  <%= submit_tag '検索' %>
+<% end %>
+
+<hr>
+
+<li><%= link_to "新規投稿", new_tweet_path %></li>
+
+<div class="tweets-container">
+  <% @tweets.each do |t| %>
+    <div class="tweet">
+      <% if t.image.attached? %>
+        <%= image_tag t.image, size: '250x200' %><br>
+      <% end %>
+
+      <!-- 投稿者情報 -->
+      <p>
+        投稿者:
+        <%= t.user.try(:name) || t.user.try(:email) %>
+      </p>
+
+      <p><%= t.body %></p>
+
+<!-- いいね機能（button_to + アイコン） -->
+<% if user_signed_in? %>
+  <% if current_user.already_liked?(t) %>
+    <%= button_to tweet_like_path(t),
+                  method: :delete,
+                  form: { data: { turbo: false } },
+                  class: "like-button" do %>
+      <i class="fas fa-heart"></i>
+      <%= t.likes.count %>
+    <% end %>
+  <% else %>
+    <%= button_to tweet_like_path(t),
+                  method: :post,
+                  form: { data: { turbo: false } },
+                  class: "like-button" do %>
+      <i class="far fa-heart"></i>
+      <%= t.likes.count %>
+    <% end %>
+  <% end %>
+<% else %>
+  <i class="far fa-heart"></i>
+  <%= t.likes.count %>
+<% end %>
+<%#  %>
+
+
+      <p><%= t.created_at %></p>
+
+      <!-- 投稿についたタグをカテゴリ別に表示 -->
+      <% guitar_tags = t.tags.select { |tag| tag.category == Tag::CATEGORY_GUITAR_TYPE } %>
+      <% price_tags  = t.tags.select { |tag| tag.category == Tag::CATEGORY_PRICE } %>
+      <% maker_tags  = t.tags.select { |tag| tag.category == Tag::CATEGORY_MAKER } %>
+
+      <% if guitar_tags.any? %>
+        <p>
+          <strong>ギターの種類:</strong>
+          <% guitar_tags.each do |tag| %>
+            <span class="tag-badge"><%= tag.name %></span>
+          <% end %>
+        </p>
+      <% end %>
+
+      <% if price_tags.any? %>
+        <p>
+          <strong>価格帯:</strong>
+          <% price_tags.each do |tag| %>
+            <span class="tag-badge"><%= tag.name %></span>
+          <% end %>
+        </p>
+      <% end %>
+
+      <% if maker_tags.any? %>
+        <p>
+          <strong>メーカー:</strong>
+          <% maker_tags.each do |tag| %>
+            <span class="tag-badge"><%= tag.name %></span>
+          <% end %>
+        </p>
+      <% end %>
+
+      <%= link_to "詳細へ", tweet_path(t.id) %>
+      <%= link_to "編集する", edit_tweet_path(t.id) %>
+      <%= button_to "削除する", tweet_path(t.id), method: :delete %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,64 @@
+<h1>GeekTwitter</h1>
+<h3>新規Tweet</h3>
+
+<%= form_for @tweet do |f| %>
+
+  <!-- ギターの種類タグ（診断結果と同じ種類をチェックできる） -->
+  <h4>ギターの種類（当てはまるものを選択）</h4>
+  <div class='form-group'>
+    <% @guitar_type_tags.each do |tag| %>
+      <div class='form-check'>
+        <label class='form-check-label'>
+          <%= check_box_tag "tweet[tag_ids][]", tag.id, @tweet.tags.include?(tag), class: 'form-check-input' %>
+          <%= tag.name %>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- メーカータグ（既存＋自由追加） -->
+  <h4>メーカー（当てはまるものを選択／新しく追加）</h4>
+  <div class='form-group'>
+    <% @maker_tags.each do |tag| %>
+      <div class='form-check'>
+        <label class='form-check-label'>
+          <%= check_box_tag "tweet[tag_ids][]", tag.id, @tweet.tags.include?(tag), class: 'form-check-input' %>
+          <%= tag.name %>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <h4>価格帯（price）</h4>
+<div class='form-group'>
+  <% Tag.price.each do |tag| %>
+    <div class='form-check'>
+      <label class='form-check-label'>
+        <%= check_box_tag "tweet[tag_ids][]", tag.id, @tweet.tags.include?(tag), class: 'form-check-input' %>
+        <%= tag.name %>
+      </label>
+    </div>
+  <% end %>
+</div>
+
+
+  <div class="field">
+    <label>新しくメーカーを追加する（カンマ or 読点区切りで複数OK）</label><br>
+    <%= text_field_tag :maker_names, nil, placeholder: "例）Fender, Gibson, YAMAHA" %>
+  </div>
+
+  <!-- ここから下は従来通り body, image -->
+  <div class="field">
+    <%= f.label :body, "感想" %>
+    <%= f.text_field :body, size: 140 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :image, "写真" %>
+    <%= f.file_field :image %>
+  </div>
+
+  <%= f.submit "Tweetする" %>
+<% end %>
+
+<%= link_to "Tweet一覧に戻る", tweets_path %>

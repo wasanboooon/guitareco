@@ -1,0 +1,56 @@
+<h1>GeekTwitter</h1>
+<h2>Tweet詳細</h2>
+
+<div class="tweet">
+
+  <!-- 投稿者 -->
+  <p>
+    <strong>投稿者:</strong>
+    <%= @tweet.user.respond_to?(:name) ? @tweet.user.name : @tweet.user.email %>
+  </p>
+
+  <!-- 本文・日時 -->
+  <h3><%= @tweet.body %></h3>
+  <p><%= @tweet.created_at %></p>
+
+  <!-- タグ一覧 -->
+  <% if @tweet.tags.any? %>
+    <p>
+      <strong>タグ:</strong>
+      <% @tweet.tags.each do |tag| %>
+        <span><%= tag.name %></span>
+      <% end %>
+    </p>
+  <% end %>
+
+  <!-- いいね機能（ハートアイコン版） -->
+  <% if user_signed_in? %>
+      <% if current_user.already_liked?(@tweet) %>
+          <%= link_to tweet_like_path(@tweet), method: :delete do %>
+              <i class="fas fa-heart" style="color: red;"></i>
+              <%= @tweet.likes.count %>
+          <% end %>
+      <% else %>
+          <%= link_to tweet_likes_path(@tweet), method: :post do %>
+              <i class="far fa-heart"></i>
+              <%= @tweet.likes.count %>
+          <% end %>
+      <% end %>
+  <% else %>
+      <i class="far fa-heart"></i>
+      <%= @tweet.likes.count %>
+  <% end %>
+
+  <br>
+  <%= link_to "編集する", edit_tweet_path(@tweet.id) %>
+
+</div>
+
+<hr>
+
+<h2>いいねしたユーザー</h2>
+<% @tweet.liked_users.each do |user| %>
+  <li><%= user.email %></li>
+<% end %>
+
+<%= link_to "Tweet一覧に戻る", tweets_path %>

@@ -1,0 +1,147 @@
+<h1>ギター診断</h1>
+
+<%= form_with url: diagnoses_result_path, method: :post do %>
+<!-- Q1 優先順位 -->
+<h2>Q1. ギター選びで大事な順に選んでください</h2>
+
+<p>1位</p>
+<select name="q1_rank1">
+  <option value="">選択してください</option>
+  <option value="1">弾きやすさ</option>
+  <option value="2">値段</option>
+  <option value="3">デザイン</option>
+  <option value="4">音</option>
+  <option value="5">ブランド・メーカー</option>
+</select>
+
+<p>2位</p>
+<select name="q1_rank2">
+  <option value="">選択してください</option>
+  <option value="1">弾きやすさ</option>
+  <option value="2">値段</option>
+  <option value="3">デザイン</option>
+  <option value="4">音</option>
+  <option value="5">ブランド・メーカー</option>
+</select>
+
+<p>3位</p>
+<select name="q1_rank3">
+  <option value="">選択してください</option>
+  <option value="1">弾きやすさ</option>
+  <option value="2">値段</option>
+  <option value="3">デザイン</option>
+  <option value="4">音</option>
+  <option value="5">ブランド・メーカー</option>
+</select>
+
+<p>4位</p>
+<select name="q1_rank4">
+  <option value="">選択してください</option>
+  <option value="1">弾きやすさ</option>
+  <option value="2">値段</option>
+  <option value="3">デザイン</option>
+  <option value="4">音</option>
+  <option value="5">ブランド・メーカー</option>
+</select>
+
+<p>5位</p>
+<select name="q1_rank5">
+  <option value="">選択してください</option>
+  <option value="1">弾きやすさ</option>
+  <option value="2">値段</option>
+  <option value="3">デザイン</option>
+  <option value="4">音</option>
+  <option value="5">ブランド・メーカー</option>
+</select>
+
+<br><br>
+
+  <!-- Q2 価格帯 -->
+  <h2>Q2. ほしいギターの価格帯は？</h2>
+  <label><input type="radio" name="q2" value="1"> 〜1万円</label><br>
+  <label><input type="radio" name="q2" value="2"> 1〜2万円</label><br>
+  <label><input type="radio" name="q2" value="3"> 2〜3万円</label><br>
+  <label><input type="radio" name="q2" value="4"> 3〜5万円</label><br>
+  <label><input type="radio" name="q2" value="5"> 5〜10万円</label><br>
+  <label><input type="radio" name="q2" value="6"> 10万円以上</label><br><br>
+
+  <!-- Q3 使う場面 -->
+  <h2>Q3. 主にどんな場面でギターを使いたい？</h2>
+  <label><input type="radio" name="q3" value="1"> 自宅で練習・趣味として</label><br>
+  <label><input type="radio" name="q3" value="2"> 友達やサークルで一緒に演奏したい</label><br>
+  <label><input type="radio" name="q3" value="3"> ライブやイベントで本格的に演奏したい</label><br>
+  <label><input type="radio" name="q3" value="4"> とりあえず始めてみたい</label><br><br>
+
+  <!-- Q4 ジャンル -->
+  <h2>Q4. 弾きたいジャンルは？</h2>
+  <label><input type="radio" name="q4" value="1"> ポップス</label><br>
+  <label><input type="radio" name="q4" value="2"> アコースティック</label><br>
+  <label><input type="radio" name="q4" value="3"> ジャズ</label><br>
+  <label><input type="radio" name="q4" value="4"> メタル・ハードロック</label><br>
+  <label><input type="radio" name="q4" value="5"> 色々なジャンルを試したい</label><br>
+  <label><input type="radio" name="q4" value="6"> クラシック</label><br>
+  <label><input type="radio" name="q4" value="7"> まだわからない</label><br><br>
+
+  <!-- Q5 大きさ・重さ -->
+  <h2>Q5. ギターの大きさ・重さは気になる？</h2>
+  <label><input type="radio" name="q5" value="1"> できるだけ軽くて小さめがいい</label><br>
+  <label><input type="radio" name="q5" value="2"> 普通くらいならOK</label><br>
+  <label><input type="radio" name="q5" value="3"> 少し大きめ・重めでも大丈夫</label><br>
+  <label><input type="radio" name="q5" value="4"> 特にこだわりはない</label><br><br>
+
+  <!-- Q6 種類 -->
+  <h2>Q6. 気になっているギターの種類は？</h2>
+  <label><input type="radio" name="q6" value="1"> アコースティックギター</label><br>
+  <label><input type="radio" name="q6" value="2"> エレキギター</label><br>
+  <label><input type="radio" name="q6" value="3"> エレアコギター</label><br>
+  <label><input type="radio" name="q6" value="4"> まだ決めていない／提案してほしい</label><br><br>
+
+  <!-- Q7 続けたい期間 -->
+  <h2>Q7. どれくらいギターを続けたい？</h2>
+  <label><input type="radio" name="q7" value="1"> 続けられるかお試し</label><br>
+  <label><input type="radio" name="q7" value="2"> 趣味として1〜2年くらい</label><br>
+  <label><input type="radio" name="q7" value="3"> 本格的に長く続けたい</label><br>
+  <label><input type="radio" name="q7" value="4"> 上達したら良いモデルに買い替えたい</label><br><br>
+
+  <!-- Q8 音の雰囲気 -->
+  <h2>Q8. 好きな音の雰囲気は？</h2>
+  <label><input type="radio" name="q8" value="1"> 明るく軽い音</label><br>
+  <label><input type="radio" name="q8" value="2"> 温かく柔らかい音</label><br>
+  <label><input type="radio" name="q8" value="3"> 歪ませたロックっぽい音</label><br>
+  <label><input type="radio" name="q8" value="4"> シャキッとしたジャキジャキ系の音</label><br>
+  <label><input type="radio" name="q8" value="5"> まだよくわからない</label><br><br>
+
+  <!-- Q9 演奏スタイル -->
+  <h2>Q9. どんな弾き方をしたい？</h2>
+  <label><input type="radio" name="q9" value="1"> カッティング（刻むリズム）</label><br>
+  <label><input type="radio" name="q9" value="2"> ストローク中心で弾き語り</label><br>
+  <label><input type="radio" name="q9" value="3"> ギターソロ・リードを目立たせたい</label><br>
+  <label><input type="radio" name="q9" value="4"> バッキング（コード伴奏）中心</label><br>
+  <label><input type="radio" name="q9" value="5"> 色んなスタイルを試したい</label><br>
+  <label><input type="radio" name="q9" value="6"> まだよくわからない</label><br><br>
+
+  <!-- Q10 弾きたい曲 -->
+  <h2>Q10. 今いちばん「これをギターで弾けるようになりたい！」と思う曲は？</h2>
+  <label><input type="radio" name="q10" value="1"> ドライフラワー / 優里</label><br>
+  <label><input type="radio" name="q10" value="2"> マリーゴールド / あいみょん</label><br>
+  <label><input type="radio" name="q10" value="3"> Pretender / Official髭男dism</label><br>
+  <label><input type="radio" name="q10" value="4"> 小さな恋のうた / MONGOL800</label><br>
+  <label><input type="radio" name="q10" value="5"> 丸の内サディスティック / 椎名林檎</label><br>
+  <label><input type="radio" name="q10" value="6"> 残響散歌 / Aimer</label><br>
+  <label><input type="radio" name="q10" value="7"> ultra soul / B'z</label><br>
+  <label><input type="radio" name="q10" value="8"> 君の知らない物語 / supercell</label><br>
+  <label><input type="radio" name="q10" value="9"> Autumn Leaves（ジャズ）</label><br>
+  <label><input type="radio" name="q10" value="10"> アルハンブラの想い出（クラシック）</label><br><br>
+
+  <!-- Q11 好きなメーカー -->
+  <h2>Q11. 気になっているメーカーはありますか？</h2>
+  <label><input type="radio" name="q11" value="1"> Fender（フェンダー）</label><br>
+  <label><input type="radio" name="q11" value="2"> Gibson（ギブソン）</label><br>
+  <label><input type="radio" name="q11" value="3"> Ibanez（アイバニーズ）</label><br>
+  <label><input type="radio" name="q11" value="4"> Yamaha（ヤマハ）</label><br>
+  <label><input type="radio" name="q11" value="5"> Taylor（テイラー）</label><br>
+  <label><input type="radio" name="q11" value="6"> 特にない・まだわからない</label><br><br>
+
+
+  <%= submit_tag "診断する" %>
+<% end %>
