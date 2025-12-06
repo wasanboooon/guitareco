@@ -5,22 +5,23 @@
 # docker run -d -p 80:80 -p 443:443 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.1.7
+ARG RUBY_VERSION=3.1.0
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
 WORKDIR /rails
 
-# Install base packages (本番でも必要なライブラリをここに全部まとめる)
+# Install packages needed to build gems (開発用ヘッダなどは build ステージにだけ入れる)
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-    curl \
-    libjemalloc2 \
+    build-essential \
+    git \
     libvips \
-    sqlite3 \
-    libsqlite3-0 \
-    libpq5 && \
+    pkg-config \
+    libpq-dev \
+    libyaml-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
 
 # Set production environment
 ENV RAILS_ENV="production" \
@@ -39,7 +40,6 @@ RUN apt-get update -qq && \
     libvips \
     pkg-config \
     libpq-dev && \
-    libyaml-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
