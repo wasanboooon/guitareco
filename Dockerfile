@@ -21,7 +21,7 @@ RUN apt-get update -qq && \
     libpq-dev \
     libyaml-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
+RUN gem update --system --no-document
 
 # Set production environment
 ENV RAILS_ENV="production" \
