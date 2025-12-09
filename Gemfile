@@ -36,7 +36,7 @@ gem "bootsnap", require: false
 
 group :development, :test do
   # gem "sqlite3", "~> 1.4"
-  gem "sqlite3", "~> 1.4"
+  gem "sqlite3", "~> 2.8"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
